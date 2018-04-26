@@ -1,0 +1,59 @@
+#include <Wire.h>
+#include "rgb_lcd.h"
+#include <math.h>
+
+rgb_lcd lcd;
+
+const int colorR = 255;
+const int colorG = 0;
+const int colorB = 0;
+const int sensor=A2; 
+
+char devid[] = "vAA06D6EBE3A8101";
+  
+char serverName[] = "api.pushingbox.com";
+boolean DEBUG = true;
+#include <Bridge.h>
+#include <HttpClient.h>
+
+void setup() 
+{
+  start:
+    // set up the LCD's number of columns and rows:
+    lcd.begin(16, 2);
+    
+    lcd.setRGB(colorR, colorG, colorB);
+
+    pinMode(13, OUTPUT);
+  digitalWrite(13, LOW);
+  Bridge.begin();
+  digitalWrite(13, HIGH);
+
+  Serial.begin(9600);
+  while (!Serial);
+}
+
+void loop() 
+{
+    // set the cursor to column 0, line 1
+    // (note: line 1 is the second row, since counting begins with 0):
+    lcd.setCursor(0, 1);
+    HttpClient client;
+  if(analogRead(A2) >70)
+  {
+    lcd.print("You got mail!");
+    String APIRequest;
+  APIRequest = String(serverName) + "/pushingbox?devid=" + String(devid)+ "&IDtag=100&TimeStamp=50&TempC="+1;
+  client.get (APIRequest);
+  }
+  else if(analogRead(A2) <70)
+  {
+    lcd.print("No mail");
+  }
+
+    delay(1000);
+      int sensorValue=analogRead(sensor);
+  Serial.println("the analog read data is ");
+  Serial.println(sensorValue);
+  delay(1000);
+}
