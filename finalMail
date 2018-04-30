@@ -51,9 +51,9 @@ void loop()
     lcd.print("No mail");
   }
 
-    delay(1000);
+    delay(5000);
       int sensorValue=analogRead(sensor);
   Serial.println("the analog read data is ");
   Serial.println(sensorValue);
-  delay(1000);
+  delay(5000);
 }
